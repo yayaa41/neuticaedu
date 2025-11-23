@@ -42,7 +42,7 @@
   </div>
 </template>
 
-<script>
+<script>//
 export default {
   name: 'AboutUs',
   data() {
