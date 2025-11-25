@@ -410,7 +410,7 @@ export default {
     margin: 0 auto;
     position: relative;
     z-index: 2;
-    }
+    }/*pliss ini abaikan saja*/
 
     .header-text h1 {
     margin: 0 0 8px 0;
