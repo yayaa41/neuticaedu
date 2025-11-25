@@ -13,27 +13,27 @@
 
                 <div class="content-section">
                     <div class="feature-grid">
-                        <div class="feature-item" style="background-image: url('/foto/lesson2,1.jpg')">
+                        <div class="feature-item" style="--bg-img: url('/foto/lesson2,1.jpg')">
                             <div class="feature-text">
                                 <h3>Plankton</h3>
                                 <p>makhluk mikroskopis yang menjadi makanan utama bagi banyak hewan laut.</p>
                         
                             </div>
                         </div>
-                        <div class="feature-item" style="background-image: url('/foto/lesson2.2.jpg')">
+                        <div class="feature-item" style="--bg-img: url('/foto/lesson2.2.jpg')">
                             <div class="feature-text">
                                 <h3>Ikan</h3>
                                 <p>penghuni laut paling dikenal, dari ikan badut kecil hingga hiu besar!</p>
                             </div>
                         </div>
-                        <div class="feature-item" style="background-image: url('/foto/lesson2.3.jpg')">
+                        <div class="feature-item" style="--bg-img: url('/foto/lesson2.3.jpg')">
                             <div class="feature-text">
                                 <h3>Karang</h3>
                                 <p>tampak seperti tumbuhan, padahal sebenarnya hewan yang hidup berkoloni dan membentuk terumbu.</p>
                             </div>
                             
                         </div>
-                        <div class="feature-item" style="background-image: url('/foto/lesson2.4.jpg')">
+                        <div class="feature-item" style="--bg-img: url('/foto/lesson2.4.jpg')">
                             <div class="feature-text">
                                 <h3>Mamalia Laut</h3>
                                 <p>seperti lumba-lumba, anjing laut, dan paus biru yang bernapas dengan paru-paru seperti manusia.</p>
@@ -70,22 +70,23 @@
 
     }
 
-    /*.course-detail::before {
+    .course-detail::before {
         content: "";
         position: absolute;
-        top: 0; left: 0;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
-        background: url('/foto/bgc2.jpg') no-repeat center;
-        background-size: contain; 
-        background-position: center;
+        background: url('/foto/bgc2.jpg') no-repeat top center;
+        background-size: contain; /* atau contain tergantung kebutuhan */
         background-repeat: no-repeat;
-        z-index: -1;
-    }*/
+        z-index: 0;
+        opacity: 0.8;
+    }
 
 
     .course-header {
-        padding-top: 50px;
+        padding-top: 170px;
         text-align: center;
         margin-bottom: 40px;
         position: relative;
@@ -96,12 +97,13 @@
         font-size: 2.5rem;
         font-family: katibeh, serif;
         margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     }
 
     .subtitle {
         font-size: 1.2rem;
         font-family: karla, serif;
-        opacity: 0.9;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     }
 
     .content-wrapper {
@@ -153,7 +155,6 @@
         height: 270px;
         border-radius: 30px;
         overflow: hidden;
-        
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
@@ -162,21 +163,18 @@
         color: white;
     }
 
-    /* Background gambar sebagai layer terpisah */
     .feature-item::before {
         content: "";
         position: absolute;
         inset: 0;
-        background-size: contain;
-        aspect-ratio: 1 / 1;
+        border-radius: 70px;
+        background-size: contain; /* atau 'auto' untuk ukuran asli */
         background-repeat: no-repeat;
         background-position: center;
-        z-index: 1; /* paling belakang */
-        
+        z-index: 1;
     }
 
-    /* Agar background ikut gambar masing-masing */
-    .feature-item[data-bg]::before {
+    .feature-item[style*="--bg-img"]::before {
         background-image: var(--bg-img);
     }
 
@@ -184,6 +182,7 @@
     
         text-align: center;
         padding-top: 115px;
+        z-index: 2;
     }
 
     .feature-text h3 {
@@ -194,6 +193,7 @@
         display: flex;
         justify-content: center;
         font-size: 30px;
+        
     }
 
     .feature-text p {
@@ -208,6 +208,7 @@
     .feature-text h3,
     .feature-text p {
         margin: 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
     }
 
 
@@ -254,20 +255,12 @@
     }
 
     @media (max-width: 768px) {
-        .feature-item {
-            width: 250px;
-            height: 250px;
-            padding: 15px;
-        }
 
         .feature-item h3 {
             font-size: 18px;
             top: 12px;
         }
 
-        .feature-item p {
-            font-size: 14px;
-        }
     }
 
     @media (max-width: 480px) {

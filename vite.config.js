@@ -7,7 +7,7 @@ export default defineConfig({
         vue(),
         quasar({
             sassVariables: 'resources/css/quasar-variables.sass'
-          }),
+        }),
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.js'],
             refresh: true,

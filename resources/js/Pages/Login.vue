@@ -119,60 +119,69 @@ export default {
         },
 
         async handleLogin() {
-        try {
-            this.errorMessage = ''
-            
-            if (!this.validateForm()) {
-            throw new Error('Please fix the input errors')
+            try {
+                this.errorMessage = ''
+                
+                if (!this.validateForm()) {
+                    throw new Error('Please fix the input errors')
+                }
+
+                this.isLoading = true
+
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 1000))
+
+                const validUsers = [
+                    { email: 'user@example.com', password: 'password123', role: 'user' },
+                    { email: 'admin@nautica.com', password: 'admin123', role: 'admin' },
+                    { email: 'test', password: 'test123', role: 'user' }
+                ]
+
+                const user = validUsers.find(u =>
+                    u.email === this.loginData.email && u.password === this.loginData.password
+                )
+
+                if (!user) {
+                    throw new Error('Invalid email/username or password')
+                }
+
+                // ✅ PERBAIKI: Simpan data user ke localStorage
+                const userData = {
+                    name: this.loginData.email.split('@')[0] || this.loginData.email,
+                    email: this.loginData.email,
+                    joinDate: new Date().toLocaleDateString('id-ID'),
+                    role: user.role
+                }
+
+                localStorage.setItem('userData', JSON.stringify(userData))
+                localStorage.setItem('isLoggedIn', 'true')
+
+                // Debug log yang benar
+                console.log('DEBUG - User found:', userData)
+                console.log('DEBUG - Role saved:', user.role)
+                console.log('DEBUG - Redirecting to:', user.role === 'admin' ? '/admin' : '/profile')
+
+                // Redirect berdasarkan role
+                if (user.role === 'admin') {
+                    this.$router.push('/admin')
+                } else {
+                    this.$router.push('/profile')
+                }
+
+            } catch (error) {
+                console.error('Login error:', error)
+                
+                if (error.message.includes('Invalid')) {
+                    this.errorMessage = 'The email/username or password you entered is incorrect. Please try again.'
+                } else if (error.message.includes('fix the input')) {
+                    this.errorMessage = error.message
+                } else {
+                    this.errorMessage = 'System error occurred. Please try again later.'
+                }
+                
+            } finally {
+                this.isLoading = false
             }
-
-            this.isLoading = true
-
-            await new Promise(resolve => setTimeout(resolve, 1000))
-
-            const validUsers = [
-            { email: 'user@example.com', password: 'password123' },
-            { email: 'admin@nautica.com', password: 'admin123' },
-            { email: 'test', password: 'test123' }
-            ]
-
-            const user = validUsers.find(u => 
-            u.email === this.loginData.email && u.password === this.loginData.password
-            )
-
-            if (!user) {
-            throw new Error('Invalid email/username or password')
-            }
-
-            const userData = {
-            name: this.loginData.email.split('@')[0] || this.loginData.email,
-            email: this.loginData.email,
-            joinDate: new Date().toLocaleDateString('id-ID')
-            }
-
-            localStorage.setItem('user', 'logged_in')
-            localStorage.setItem('userData', JSON.stringify(userData))
-
-            if (window.updateLoginStatus) {
-            window.updateLoginStatus(true)
-            }
-
-            this.$router.push('/profile')
-
-        } catch (error) {
-            console.error('Login error:', error)
-            
-            if (error.message.includes('Invalid')) {
-            this.errorMessage = 'The email/username or password you entered is incorrect. Please try again.'
-            } else if (error.message.includes('fix the input')) {
-            this.errorMessage = error.message
-            } else {
-            this.errorMessage = 'System error occurred. Please try again later.'
-            }
-            
-        } finally {
-            this.isLoading = false
-        }
         }
     }
 }

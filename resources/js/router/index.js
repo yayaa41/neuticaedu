@@ -1,5 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+import { provide } from 'vue'
+import Login from '@/Pages/Login.vue'
+import AdminLayout from '@/components/AdminLayout.vue'
+import AdminDashboard from '@/Pages/admin/Dashboard.vue'
+
+
+
 const routes = [
   {
     path: '/',
@@ -60,16 +67,91 @@ const routes = [
   },
 
   {
+    path: '/quiz',
+    name: 'Quiz',
+    component: ()=> import('../Pages/Quiz.vue')
+  },
+
+  {
     path: '/edit-profile',
     name: 'EditProfile',
     component: () => import('../Pages/EditProfile.vue')
-  }
+  },
 
+  {
+    path: '/admin',
+    component: () => import('../components/AdminLayout.vue'),
+    meta: { requiresAdmin: true },
+    children: [
+      {
+        path: '',
+        name: 'AdminDashboard',
+        component: () => import('../Pages/admin/Dashboard.vue')
+      },
+      {
+        path: 'users',
+        name: 'AdminUsers',
+        component: () => import('../Pages/admin/Users.vue')
+      },
+      {
+        path: 'berita',
+        name: 'AdminBerita',
+        component: () => import('../Pages/admin/Berita.vue')
+      },
+      {
+        path: 'komunitas',
+        name: 'AdminKomunitas',
+        component: () => import('../Pages/admin/Komunitas.vue')
+      },
+      {
+        path: 'volunteer',
+        name: 'AdminVolunteer',
+        component: () => import('../Pages/admin/Volunteer.vue')
+      }
+    ]
+  }
 ]
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
+    scrollBehavior(to, from, savedPosition) {
+    // Scroll ke atas dengan smooth behavior
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({ top: 0, behavior: 'smooth' })
+      }, 100)
+    })
+  }
+})
+
+router.beforeEach((to, from, next) => {
+    const isLoggedIn = localStorage.getItem('isLoggedIn')
+    const userData = localStorage.getItem('userData')
+
+    console.log('Navigation to:', to.path)
+    console.log('Is logged in:', isLoggedIn)
+    console.log('User data:', userData)
+
+    if (to.meta.requiresAdmin) {
+    if (!isLoggedIn) {
+      console.log('Not logged in, redirecting to login')
+      return next('/login')
+    }
+    
+    try {
+      const user = JSON.parse(userData)
+      if (user.role !== 'admin') {
+        console.log('Not admin, redirecting to home')
+        return next('/')
+      }
+    } catch (e) {
+      console.log('Error parsing user data, redirecting to login')
+      return next('/login')
+    }
+  }
+
+  next()
 })
 
 export default router

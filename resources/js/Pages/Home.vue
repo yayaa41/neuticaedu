@@ -1,6 +1,5 @@
 <template>
   <div class="home-wrapper">
-
     <div class="home-page">
       <section class="hero">
         <h1 class="welcome-title">Welcome to NauticaEdū!</h1>
@@ -9,74 +8,93 @@
     </div>
 
     <div class="news-grid">
-
       <!-- Large 1 -->
-      <article class="item large-1">
-        <img :src="'/foto/palingbesar.jpg'" alt="Hiu Paus">
+      <article class="item large-1" @click="openLink(getNewsItem('large1')?.link)" v-if="getNewsItem('large1')">
+        <img :src="getNewsItem('large1')?.image" :alt="getNewsItem('large1')?.title" @error="handleImageError">
         <div class="text-large1">
-          <h2>Hiu Paus Terdampar di Pantai Kita</h2>
-          <p class="date">November 18, 2025</p>
-          <button>READ MORE</button>
+          <h2>{{ getNewsItem('large1')?.title }}</h2>
+          <p class="date">{{ getNewsItem('large1')?.date }}</p>
+          <button @click.stop="openLink(getNewsItem('large1')?.link)">READ MORE</button>
         </div>
       </article>
 
       <!-- Large 2 -->
-      <article class="item large-2">
-        <img :src="'/foto/besar2.jpg'" alt="Sampah Plastik">
+      <article class="item large-2" @click="openLink(getNewsItem('large2')?.link)" v-if="getNewsItem('large2')">
+        <img :src="getNewsItem('large2')?.image" :alt="getNewsItem('large2')?.title" @error="handleImageError">
         <div class="text-large2">
-          <h2>Bahaya Sampah Plastik di Laut: Bisa Cemari Ikan Konsumsi</h2>
-          <p class="date">November 15, 2025</p>
-          <button>READ MORE</button>
+          <h2>{{ getNewsItem('large2')?.title }}</h2>
+          <p class="date">{{ getNewsItem('large2')?.date }}</p>
+          <button @click.stop="openLink(getNewsItem('large2')?.link)">READ MORE</button>
         </div>
       </article>
 
       <!-- Large 3 -->
-      <article class="item large-3">
-        <img :src="'/foto/panjang.jpg'" alt="Lumba-lumba">
+      <article class="item large-3" @click="openLink(getNewsItem('large3')?.link)" v-if="getNewsItem('large3')">
+        <img :src="getNewsItem('large3')?.image" :alt="getNewsItem('large3')?.title" @error="handleImageError">
         <div class="text-large3">
-          <h2>Kawanan Lumba-lumba Muncul di Laut Pulau Pramuka Jakarta</h2>
-          <p class="date">Agustus 25, 2025</p>
+          <h2>{{ getNewsItem('large3')?.title }}</h2>
+          <p class="date">{{ getNewsItem('large3')?.date }}</p>
         </div>
       </article>
 
       <!-- Small row -->
       <div class="small-row">
-        <article class="item small-1">
-          <img :src="'/foto/kecil1.jpg'" alt="Kecil 1">
+        <article class="item small-1" @click="openLink(getNewsItem('small1')?.link)" v-if="getNewsItem('small1')">
+          <img :src="getNewsItem('small1')?.image" :alt="getNewsItem('small1')?.title" @error="handleImageError">
           <div class="text-small1">
-            <h4>Menikmati keindahan bawah laut Sombu di Wakatobi, habitat dari ribuan spesies biota laut</h4>
-            <p class="date">Oktober 7, 2025</p>
+            <h4>{{ getNewsItem('small1')?.title }}</h4>
+            <p class="date">{{ getNewsItem('small1')?.date }}</p>
           </div>
         </article>
 
-        <article class="item small-2">
-          <img :src="'/foto/kecil2.jpg'" alt="Kecil 2">
+        <article class="item small-2" @click="openLink(getNewsItem('small2')?.link)" v-if="getNewsItem('small2')">
+          <img :src="getNewsItem('small2')?.image" :alt="getNewsItem('small2')?.title" @error="handleImageError">
           <div class="text-small2">
-            <h4>Menjaga dan mengolah boga bahari Indonesia Timur</h4>
-            <p class="date">Desember 8, 2022</p>
+            <h4>{{ getNewsItem('small2')?.title }}</h4>
+            <p class="date">{{ getNewsItem('small2')?.date }}</p>
           </div>
         </article>
       </div>
+      
       <p class="teksbawah">Tertarik menjadi bagian dalam melindungi laut? Mari bergabung dengan komunitas kami atau menjadi volunteer untuk berpartisipasi menjaga laut kita! 
       Dapat diakses melalui bagian 
       <router-link to="/community" class="inline-link">community</router-link>.</p>
-
     </div>
-
   </div>
 </template>
 
-
-
 <script>
-const NewsGrid = {
-  name: "NewsGrid",
-  props: ["items"]
-};
-
 export default {
   name: "Home",
-  components: { NewsGrid }
+  data() {
+    return {
+      newsItems: []
+    }
+  },
+  mounted() {
+    this.loadNewsFromStorage();
+  },
+  methods: {
+    openLink(url) {
+      if (url) {
+        window.open(url, '_blank');
+      }
+    },
+    loadNewsFromStorage() {
+      // Load data dari localStorage
+      const savedNews = localStorage.getItem('homepageNews');
+      if (savedNews) {
+        this.newsItems = JSON.parse(savedNews);
+      }
+    },
+    getNewsItem(position) {
+      return this.newsItems.find(item => item.position === position && item.status === 'published');
+    },
+    handleImageError(event) {
+      // Fallback image atau hide image jika error
+      event.target.style.display = 'none';
+    }
+  }
 };
 </script>
 
@@ -205,7 +223,13 @@ export default {
   overflow: hidden;
   border-radius: 6px;
   min-height: 120px;
-  background: #111; /* fallback saat gambar belum load */
+  background: #111;
+  cursor: pointer; /* Tambahkan ini */
+  transition: transform 0.3s ease; /* Efek hover opsional */
+}
+
+.item:hover {
+  transform: scale(1.02); /* Efek hover opsional */
 }
 
 /* Pastikan gambar memenuhi kotak dan ter-crop rapi */

@@ -1,5 +1,5 @@
 <template>
-  <div class="course-page">
+  <div class="course-page" :class="{ 'page-loaded': pageLoaded }">
     <h1 class="title">Let's Learn Together!</h1>
     <h2 class="subtitle">Lautan sangat luas dengan berbagai misteri didalamnya!</h2>
     
@@ -7,11 +7,11 @@
     <div class="course-slider" ref="slider">
       <div class="course-card" v-for="course in courses" :key="course.id">
         <div class="card-image">
-          <img :src="course.image" :alt="course.title" />
+          <img :src="course.image" :alt="course.title" @load="imageLoaded" />
         </div>
         <div class="card-content">
           <h3>{{ course.title }}</h3>
-          <p class="desccourse">{{ course.desc }}</p>
+          <p class="desccourse">{{ course.description }}</p>
           <button @click="openCourse(course.id)" class="btn-detail">Lihat Materi</button>
         </div>
       </div>
@@ -29,35 +29,49 @@ export default {
   name: "CoursePage",
   data() {
     return {
+      pageLoaded: false,
+      imagesLoaded: 0,
       courses: [
         {
           id: 1,
           title: "Menyelam ke Dunia Laut",
-          desc: "Mengenal dasar-dasar ekosistem laut dan perannya.",
+          description: "Mengenal dasar-dasar ekosistem laut dan perannya.",
           image: "/foto/course1.jpg"
         },
         {
           id: 2,
           title: "Siapa Saja Penghuni Laut?",
-          desc: "Mengenal laut dan perannya dalam kehidupan",
+          description: "Mengenal laut dan perannya dalam kehidupan",
           image: "/foto/course2.jpg"
         },
         {
           id: 3,
           title: "Laut Kita Terancam!",
-          desc: "Memahami ancaman terhadap ekosistem laut dan cara mengatasinya.",
+          description: "Memahami ancaman terhadap ekosistem laut dan cara mengatasinya.",
           image: "/foto/course3.jpg"
         },
         {
           id: 4,
           title: "Selamatkan Laut Kita!",
-          desc: "Bertindak secara nyata, tidak hanya sekedar tau",
+          description: "Bertindak secara nyata, tidak hanya sekedar tau",
           image: "/foto/course4.jpg"
         }
       ]
     }
   },
+  mounted() {
+    // Fallback jika gambar tidak load
+    setTimeout(() => {
+      this.pageLoaded = true;
+    }, 500);
+  },
   methods: {
+    imageLoaded() {
+      this.imagesLoaded++;
+      if (this.imagesLoaded >= this.courses.length) {
+        this.pageLoaded = true;
+      }
+    },
     openCourse(id) {
       this.$router.push(`/course/${id}`)
     },
@@ -69,6 +83,7 @@ export default {
 </script>
 
 <style scoped>
+/* Tambahkan di bagian atas CSS */
 .course-page {
   text-align: center;
   position: relative;
@@ -79,8 +94,13 @@ export default {
   align-items: center;
   padding: 20px;
   box-sizing: border-box;
-  z-index: 1; /* pastikan konten di atas background */
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
 
+.course-page.page-loaded {
+  opacity: 1;
 }
 
 .course-page::before {
@@ -90,10 +110,11 @@ export default {
   width: 100%;
   height: 100%;
   background: url('/foto/bgcourse.jpg') no-repeat center/cover;
-  opacity: 0.5; /* transparansi supaya ikan tetap terlihat */
+  opacity: 0.5;
   z-index: -1;
 }
 
+/* CSS lainnya TETAP SAMA seperti sebelumnya */
 .title {
   font-size: 2.5rem;
   padding-top: 30px;
@@ -145,7 +166,6 @@ export default {
   box-sizing: border-box;
 }
 
-
 .course-card:hover {
   transform: translateY(-5px) scale(1.05);;
   box-shadow: 0 8px 20px rgba(0,0,0,0.2);
@@ -170,8 +190,6 @@ export default {
   display: block;
 }
 
-
-
 .card-content {
   padding: 20px;
   display: flex;
@@ -188,7 +206,6 @@ export default {
   color: #0056a3;
   font-family: karla, serif;
   line-height: 1.3;
-  
 }
 
 .desccourse {
@@ -197,9 +214,9 @@ export default {
   font-family: karla, serif;
   margin-bottom: 0;
   line-height: 1.4;
-  overflow: hidden; /* MENCEGAH TEKS MELUAP */
+  overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* BATASI JUMLAH BARIS */
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   min-height: 0;
 }
@@ -215,7 +232,7 @@ export default {
   font-family: karla, serif;
   font-size: 0.9rem;
   font-weight: 600;
-  margin-top: 0; /* PUSH TOMBOL KE BAWAH */
+  margin-top: 0;
 }
 
 .btn-detail:hover {
@@ -248,8 +265,7 @@ export default {
   background: #bed7f4;
 }
 
-/* MEDIA QUERIES */
-/* Tablet */
+/* MEDIA QUERIES - TETAP SAMA */
 @media (min-width: 768px) {
   .title {
     font-size: 3.5rem;
@@ -265,7 +281,7 @@ export default {
   }
   
   .card-image {
-    height: 170px; /* TINGGI GAMBAR TETAP */
+    height: 170px;
   }
   
   .course-card h3 {
@@ -274,11 +290,10 @@ export default {
   
   .desccourse {
     font-size: 1rem;
-    -webkit-line-clamp: 4; /* LEBIH BANYAK BARIS DI TABLET */
+    -webkit-line-clamp: 4;
   }
 }
 
-/* Desktop */
 @media (min-width: 1024px) {
   .title {
     font-size: 4.5rem;
@@ -291,15 +306,15 @@ export default {
   
   .course-card {
     min-width: 320px;
-    height: 420px; /* TINGGI TETAP */
+    height: 420px;
   }
   
   .card-image {
-    height: 180px; /* TINGGI GAMBAR TETAP */
+    height: 180px;
   }
   
   .desccourse {
-    -webkit-line-clamp: 4; /* LEBIH BANYAK BARIS DI DESKTOP */
+    -webkit-line-clamp: 4;
   }
   
   .btn-quiz {
@@ -308,7 +323,6 @@ export default {
   }
 }
 
-/* Very small devices */
 @media (max-width: 360px) {
   .course-page {
     padding: 15px 10px;
@@ -325,11 +339,11 @@ export default {
   
   .course-card {
     min-width: 260px;
-    height: 360px; /* TINGGI TETAP */
+    height: 360px;
   }
   
   .card-image {
-    height: 140px; /* TINGGI GAMBAR TETAP */
+    height: 140px;
   }
   
   .card-content {
@@ -342,7 +356,7 @@ export default {
   
   .desccourse {
     font-size: 0.85rem;
-    -webkit-line-clamp: 3; /* LEBIH SEDIKIT BARIS DI MOBILE KECIL */
+    -webkit-line-clamp: 3;
   }
 }
 </style>

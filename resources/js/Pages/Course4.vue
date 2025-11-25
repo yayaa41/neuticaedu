@@ -1,22 +1,5 @@
 <template>
-  <div class="nautical-edit">
-    <!-- Header & Navigation -->
-    <header>
-      <div class="container">
-        <nav class="navbar">
-          <div class="logo">
-            <i class="fas fa-water"></i>
-            NauticalEdit
-          </div>
-          <ul class="nav-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Course</a></li>
-            <li><a href="#">Community</a></li>
-            <li><a href="#">About Us</a></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
+  <div class="course4">
 
     <!-- Hero Section -->
     <section class="hero">
@@ -24,7 +7,6 @@
         <div class="hero-content">
           <h1>Selamatkan Laut Kita!</h1>
           <p>Langkah kecil yang bisa kamu lakukan hari ini.</p>
-          <div class="hero-wave"></div>
         </div>
       </div>
     </section>
@@ -72,7 +54,7 @@
                 <div class="coral coral-3">🐠</div>
               </div>
               <div class="image-placeholder">
-                <p>[Gambar akan diisi manual]</p>
+                <img :src="'/foto/lesson4.jpeg'">
               </div>
             </div>
           </div>
@@ -113,18 +95,10 @@
       </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-      <div class="container">
-        <div class="footer-content">
-          <div class="footer-logo">
-            <i class="fas fa-water"></i>
-            NauticalEdit
-          </div>
-          <p>Bersama kita selamatkan laut untuk generasi mendatang</p>
-        </div>
-      </div>
-    </footer>
+    <div class="navigation">
+      <button @click="$router.back()" class="nav-btn back-btn">Kembali</button>
+      <button @click="$router.push('/quiz')" class="nav-btn next-btn">Kerjakan Quiz</button>
+    </div>
 
     <!-- Celebration Overlay -->
     <div class="celebration-overlay" v-if="showCelebration" @click="closeCelebration">
@@ -162,7 +136,7 @@
 
 <script>
 export default {
-  name: 'NauticalEdit',
+  name: 'Course4',
   data() {
     return {
       isPledging: false,
@@ -198,11 +172,21 @@ export default {
 </script>
 
 <style scoped>
-/* Reset dan Base Styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+.course4{
+  background-color: #735936;
+}
+
+.course4::before {
+        content: ""; position: absolute; 
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('/foto/bgc4.jpg') no-repeat top center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        z-index: 0;
+        pointer-events: none;
 }
 
 body {
@@ -213,66 +197,15 @@ body {
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 0 20px;
 }
-
-/* Header */
-header {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-}
-
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 0;
-}
-
-.logo {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #1e40af;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.logo i {
-  color: #06b6d4;
-}
-
-.nav-links {
-  display: flex;
-  list-style: none;
-  gap: 2rem;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: #475569;
-  font-weight: 500;
-  transition: color 0.3s;
-}
-
-.nav-links a:hover {
-  color: #1e40af;
-}
-
 /* Hero Section */
 .hero {
-  background: linear-gradient(135deg, #1e40af 0%, #06b6d4 100%);
   color: white;
-  padding: 120px 0 80px;
-  margin-top: 70px;
+  padding: 100px 0 80px;
+  margin-top: 7px;
   position: relative;
   overflow: hidden;
 }
@@ -298,16 +231,6 @@ header {
   margin-bottom: 2rem;
 }
 
-.hero-wave {
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  width: 100%;
-  height: 100px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z' fill='%23f8fafc'%3E%3C/path%3E%3C/svg%3E");
-  background-size: cover;
-}
-
 /* Main Content */
 .content-wrapper {
   padding: 4rem 0;
@@ -321,37 +244,28 @@ header {
 .tips-section h2 {
   text-align: center;
   font-size: 2.5rem;
-  color: #1e293b;
+  color: whitesmoke;
   margin-bottom: 3rem;
   position: relative;
 }
 
-.tips-section h2::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 4px;
-  background: linear-gradient(135deg, #1e40af, #06b6d4);
-  border-radius: 2px;
-}
 
 .tips-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
+
 }
 
 .tip-card {
-  background: white;
+  background: rgba(255, 255, 255, 0.5);
   padding: 2rem;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   text-align: center;
   transition: transform 0.3s, box-shadow 0.3s;
   border: 1px solid #f1f5f9;
+  z-index: 2;
 }
 
 .tip-card:hover {
@@ -575,28 +489,40 @@ header {
   font-size: 0.9rem;
 }
 
-/* Footer */
-.footer {
-  background: #1e293b;
-  color: white;
-  padding: 3rem 0;
-  text-align: center;
-}
+.navigation {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        max-width: 1000px;
+        margin: 40px auto 0 auto;
+        padding: 0 20px;
+    }
 
-.footer-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
+    .nav-btn {
+        padding: 12px 30px;
+        border: none;
+        border-radius: 8px;
+        font-family: karla, serif;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-bottom: 50px;
+        z-index: 2;
+    }
 
-.footer-logo {
-  font-size: 1.5rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
+    .back-btn {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+
+    .next-btn {
+        background: #0056a3;
+        color: white;
+    }
+
+    .nav-btn:hover {
+        transform: translateY(-2px);
+    }
 
 /* Celebration Overlay */
 .celebration-overlay {

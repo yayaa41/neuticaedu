@@ -7,35 +7,96 @@
             <!-- PROFILE CARD -->
             <section class="card profile-card animate-on-scroll">
                 <div class="profile-left">
-                    <div class="avatar" aria-hidden="true"></div>
+                    <div class="avatar" @click="goEditProfile" style="cursor: pointer;">
+                        <img v-if="user.avatar" :src="user.avatar" alt="Profile" class="avatar-image" />
+                        <div v-else class="avatar-placeholder">
+                            {{ user.name ? user.name.charAt(0).toUpperCase() : 'U' }}
+                        </div>
+                    </div>
+
                     <div class="profile-meta">
                         <h2 class="username">{{ user.name }} <small class="edit" @click="goEditProfile">✎</small></h2>
+                        <p class="username-handle">@{{ user.username }}</p>
                         <p class="email">{{ user.email }}</p>
+                        <p v-if="user.bio && user.bio !== 'Belum ada bio'" class="user-bio">{{ user.bio }}</p>
                         <div class="member-badge">⭐ Member sejak {{ user.joined }}</div>
                     </div>
                 </div>
+                
                 <div class="profile-actions">
                     <button class="btn logout" @click="logout">Logout</button>
                 </div>
             </section>
 
-            <!-- STATISTICS -->
             <section class="card stats-card animate-on-scroll">
                 <h3>Statistik Aktivitas</h3>
                 <div class="stats-grid">
                     <div class="stat-item">
+                        <!-- SVG 1 (Course) -->
+                        <svg width="95" height="95" viewBox="0 0 95 95" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M75.5054 80.9677L31.2314 67.6875V3.79999L75.2085 16.9812C76.1803 17.2776 77.0315 17.8776 77.6371 18.6934C78.2426 19.5091 78.5707 20.4976 78.5731 21.5135V78.7114C78.5749 79.0827 78.4889 79.4492 78.3221 79.7809C78.1553 80.1126 77.9125 80.4002 77.6134 80.6202C77.3143 80.8401 76.9674 80.9863 76.6011 81.0467C76.2347 81.1071 75.8593 81.08 75.5054 80.9677Z" fill="#004B85"/>
+                            <path d="M75.5054 80.9677L31.2314 67.6875V3.79999L75.2085 16.9812C76.1803 17.2776 77.0315 17.8776 77.6371 18.6934C78.2426 19.5091 78.5707 20.4976 78.5731 21.5135V78.7114C78.5749 79.0827 78.4889 79.4492 78.3221 79.7809C78.1553 80.1126 77.9125 80.4002 77.6134 80.6202C77.3143 80.8401 76.9674 80.9863 76.6011 81.0467C76.2347 81.1071 75.8593 81.08 75.5054 80.9677Z" stroke="#656565" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M40.8893 6.70936L31.2309 3.79999V67.6875L40.8893 70.5771V6.70936ZM31.2309 3.79999L19.3955 12.0927V37.8219L31.2309 27.3125V3.79999Z" fill="#656769"/>
+                            <path d="M31.2309 3.79999L40.8893 6.70936V70.5771L31.2309 67.6875V3.79999ZM31.2309 3.79999L19.3955 12.0927V37.8219L31.2309 27.3125V3.79999Z" stroke="#656565" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path opacity="0.15" d="M20.2861 89.4781C20.2861 89.9434 20.99 90.404 22.3576 90.8339C23.7252 91.2637 25.7298 91.6542 28.2568 91.9832C30.7838 92.3122 33.7838 92.5731 37.0855 92.7512C40.3872 92.9292 43.9259 93.0208 47.4997 93.0208C51.0734 93.0208 54.6121 92.9292 57.9138 92.7512C61.2155 92.5731 64.2155 92.3122 66.7425 91.9832C69.2696 91.6542 71.2741 91.2637 72.6417 90.8339C74.0093 90.404 74.7132 89.9434 74.7132 89.4781C74.7132 89.0129 74.0093 88.5522 72.6417 88.1224C71.2741 87.6926 69.2696 87.302 66.7425 86.973C64.2155 86.6441 61.2155 86.3831 57.9138 86.2051C54.6121 86.027 51.0734 85.9354 47.4997 85.9354C43.9259 85.9354 40.3872 86.027 37.0855 86.2051C33.7838 86.3831 30.7838 86.6441 28.2568 86.973C25.7298 87.302 23.7252 87.6926 22.3576 88.1224C20.99 88.5522 20.2861 89.0129 20.2861 89.4781Z" fill="#656565"/>
+                            <path d="M63.6504 86.9646L72.6358 80.1167V22.1469L63.6504 28.3417V86.9646Z" fill="#FFFCE5"/>
+                            <path d="M63.6504 28.3417V37.7823L72.6358 31.5677V22.1469L63.6504 28.3417Z" fill="#FFFEF2"/>
+                            <path d="M63.6504 86.9646L72.6358 80.1167V22.1469L63.6504 28.3417V86.9646Z" stroke="#656565" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M31.2309 9.71771L22.3643 15.9323L63.7684 28.3417L72.6351 22.1469L31.2309 9.71771Z" fill="#FFFEF2" stroke="#656565" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M63.6695 89.2406L21.0976 76.475C20.6064 76.3299 20.1753 76.0299 19.8685 75.6197C19.5618 75.2095 19.3959 74.7112 19.3955 74.199V12.0927L63.333 25.274C64.3081 25.5647 65.1629 26.1633 65.7694 26.9803C66.3759 27.7973 66.7015 28.7887 66.6976 29.8063V87.0833C66.6825 87.4417 66.5858 87.7918 66.4148 88.107C66.2438 88.4223 66.0031 88.6943 65.711 88.9024C65.4189 89.1105 65.0832 89.2491 64.7294 89.3078C64.3756 89.3664 64.0131 89.3434 63.6695 89.2406Z" fill="#004B85"/>
+                            <path d="M63.333 25.274L19.3955 12.0927V19.0396L63.333 32.2208C64.3081 32.5115 65.1629 33.1102 65.7694 33.9272C66.3759 34.7442 66.7015 35.7356 66.6976 36.7531V29.8063C66.7015 28.7887 66.3759 27.7973 65.7694 26.9803C65.1629 26.1633 64.3081 25.5647 63.333 25.274Z" fill="#5BA6FA"/>
+                            <path d="M63.6695 89.2406L21.0976 76.475C20.6064 76.3299 20.1753 76.0299 19.8685 75.6197C19.5618 75.2095 19.3959 74.7112 19.3955 74.199V12.0927L63.333 25.274C64.3081 25.5647 65.1629 26.1633 65.7694 26.9803C66.3759 27.7973 66.7015 28.7887 66.6976 29.8063V87.0833C66.6825 87.4416 66.5858 87.7918 66.4148 88.107C66.2438 88.4223 66.0031 88.6943 65.711 88.9024C65.4189 89.1105 65.0832 89.2491 64.7294 89.3078C64.3756 89.3664 64.0130 89.3434 63.6695 89.2406Z" stroke="#656565" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M29.0736 14.9823L19.3955 12.0927V74.199C19.3959 74.7112 19.5618 75.2095 19.8685 75.6197C20.1753 76.0299 20.6064 76.3299 21.0976 76.475L29.0143 78.8698L29.0736 14.9823Z" fill="#656769"/>
+                            <path d="M19.3955 12.0927V19.0396L29.0736 21.9292V14.9823L19.3955 12.0927Z" fill="#87898C"/>
+                            <path d="M29.0736 14.9823L19.3955 12.0927V74.199C19.3959 74.7112 19.5618 75.2095 19.8685 75.6197C20.1753 76.0299 20.6064 76.3299 21.0976 76.475L29.0143 78.8698L29.0736 14.9823Z" stroke="#656565" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M55.0402 45.4813L39.959 41.0479V31.5677L55.0402 36.0208V45.4813Z" fill="white" stroke="#656565" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                         <div class="stat-value">{{ stats.courses }}</div>
                         <div class="stat-label">Course Selesai</div>
                     </div>
+                    
                     <div class="stat-item">
+                        <!-- SVG 2 (Community Posts) -->
+                        <svg width="95" height="95" viewBox="0 0 95 95" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M63.333 43.5417C69.9038 43.5417 75.1684 38.2375 75.1684 31.6667C75.1684 25.0958 69.9038 19.7917 63.333 19.7917C56.7622 19.7917 51.458 25.0958 51.458 31.6667C51.458 38.2375 56.7622 43.5417 63.333 43.5417ZM31.6663 43.5417C38.2372 43.5417 43.5018 38.2375 43.5018 31.6667C43.5018 25.0958 38.2372 19.7917 31.6663 19.7917C25.0955 19.7917 19.7913 25.0958 19.7913 31.6667C19.7913 38.2375 25.0955 43.5417 31.6663 43.5417ZM31.6663 51.4583C22.4434 51.4583 3.95801 56.0896 3.95801 65.3125V71.25C3.95801 73.4271 5.73926 75.2083 7.91634 75.2083H55.4163C57.5934 75.2083 59.3747 73.4271 59.3747 71.25V65.3125C59.3747 56.0896 40.8893 51.4583 31.6663 51.4583ZM63.333 51.4583C62.1851 51.4583 60.8788 51.5375 59.4934 51.6562C59.5726 51.6958 59.6122 51.775 59.6518 51.8146C64.1643 55.1 67.2913 59.4937 67.2913 65.3125V71.25C67.2913 72.6354 67.0143 73.9812 66.5788 75.2083H87.083C89.2601 75.2083 91.0413 73.4271 91.0413 71.25V65.3125C91.0413 56.0896 72.5559 51.4583 63.333 51.4583Z" fill="#0060C0"/>
+                        </svg>
                         <div class="stat-value">{{ stats.posts }}</div>
                         <div class="stat-label">Post Community</div>
                     </div>
+                    
                     <div class="stat-item">
+                        <!-- SVG 3 (Volunteer Hours) -->
+                        <svg width="85" height="85" viewBox="0 0 85 85" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M37.7773 11.8055H47.2218V18.8889H37.7773V11.8055Z" fill="#292F33"/>
+                            <path d="M51.9441 2.36111H33.0552C30.458 2.36111 28.333 4.48611 28.333 7.08334C28.333 9.68056 30.458 11.8056 33.0552 11.8056H51.9441C54.5413 11.8056 56.6663 9.68056 56.6663 7.08334C56.6663 4.48611 54.5413 2.36111 51.9441 2.36111ZM66.5452 27.1693L62.9941 24.0574C62.0558 23.2299 61.4829 22.0648 61.4006 20.8164C61.3183 19.568 61.7333 18.3378 62.555 17.3943C63.3824 16.4559 64.5475 15.8831 65.7959 15.8008C67.0443 15.7185 68.2745 16.1335 69.218 16.9551L72.7691 20.0671C74.7218 21.7789 74.9201 24.7775 73.2083 26.7301C72.3808 27.6685 71.2157 28.2414 69.9673 28.3237C68.7189 28.4059 67.4887 27.991 66.5452 27.1693Z" fill="#8899A6"/>
+                            <path d="M42.4996 75.5556C56.8436 75.5556 68.4718 63.9274 68.4718 49.5833C68.4718 35.2393 56.8436 23.6111 42.4996 23.6111C28.1555 23.6111 16.5273 35.2393 16.5273 49.5833C16.5273 63.9274 28.1555 75.5556 42.4996 75.5556Z" fill="#F5F8FA"/>
+                            <path d="M42.4999 16.5278C24.2438 16.5278 9.44434 31.3272 9.44434 49.5833C9.44434 67.8394 24.2438 82.6389 42.4999 82.6389C60.756 82.6389 75.5555 67.8394 75.5555 49.5833C75.5555 31.3272 60.756 16.5278 42.4999 16.5278ZM42.4999 75.5555C28.1798 75.5555 16.5277 63.9035 16.5277 49.5833C16.5277 35.2632 28.1798 23.6111 42.4999 23.6111C56.82 23.6111 68.4721 35.2632 68.4721 49.5833C68.4721 63.9035 56.82 75.5555 42.4999 75.5555Z" fill="#004B85"/>
+                            <path d="M63.7496 51.9445H40.1385C39.5122 51.9445 38.9117 51.6957 38.4689 51.2529C38.0261 50.8101 37.7773 50.2095 37.7773 49.5833C37.7773 48.9571 38.0261 48.3566 38.4689 47.9138C38.9117 47.471 39.5122 47.2222 40.1385 47.2222H63.7496C64.3758 47.2222 64.9763 47.471 65.4191 47.9138C65.8619 48.3566 66.1107 48.9571 66.1107 49.5833C66.1107 50.2095 65.8619 50.8101 65.4191 51.2529C64.9763 51.6957 64.3758 51.9445 63.7496 51.9445Z" fill="#292F33"/>
+                            <path d="M42.4998 30.6945C43.8038 30.6945 44.8609 29.6373 44.8609 28.3333C44.8609 27.0293 43.8038 25.9722 42.4998 25.9722C41.1958 25.9722 40.1387 27.0293 40.1387 28.3333C40.1387 29.6373 41.1958 30.6945 42.4998 30.6945Z" fill="#292F33"/>
+                            <path d="M42.4998 73.1945C43.8038 73.1945 44.8609 72.1373 44.8609 70.8333C44.8609 69.5293 43.8038 68.4722 42.4998 68.4722C41.1958 68.4722 40.1387 69.5293 40.1387 70.8333C40.1387 72.1373 41.1958 73.1945 42.4998 73.1945Z" fill="#292F33"/>
+                            <path d="M28.3338 37.7778C29.6378 37.7778 30.6949 36.7207 30.6949 35.4167C30.6949 34.1126 29.6378 33.0555 28.3338 33.0555C27.0298 33.0555 25.9727 34.1126 25.9727 35.4167C25.9727 36.7207 27.0298 37.7778 28.3338 37.7778Z" fill="#292F33"/>
+                            <path d="M56.6668 66.1111C57.9708 66.1111 59.0279 65.054 59.0279 63.75C59.0279 62.446 57.9708 61.3889 56.6668 61.3889C55.3628 61.3889 54.3057 62.446 54.3057 63.75C54.3057 65.054 55.3628 66.1111 56.6668 66.1111Z" fill="#292F33"/>
+                            <path d="M21.2498 51.9445C22.5538 51.9445 23.6109 50.8873 23.6109 49.5833C23.6109 48.2793 22.5538 47.2222 21.2498 47.2222C19.9458 47.2222 18.8887 48.2793 18.8887 49.5833C18.8887 50.8873 19.9458 51.9445 21.2498 51.9445Z" fill="#292F33"/>
+                            <path d="M56.6668 37.7778C57.9708 37.7778 59.0279 36.7207 59.0279 35.4167C59.0279 34.1126 57.9708 33.0555 56.6668 33.0555C55.3628 33.0555 54.3057 34.1126 54.3057 35.4167C54.3057 36.7207 55.3628 37.7778 56.6668 37.7778Z" fill="#292F33"/>
+                            <path d="M28.3337 66.1111C27.8663 66.1122 27.4091 65.9743 27.0202 65.715C26.6312 65.4558 26.3281 65.0868 26.1492 64.655C25.9704 64.2231 25.9239 63.7479 26.0156 63.2895C26.1073 62.8312 26.3331 62.4105 26.6644 62.0807L43.1922 45.5529C43.4114 45.3337 43.6716 45.1598 43.958 45.0412C44.2445 44.9225 44.5514 44.8615 44.8615 44.8615C45.1715 44.8615 45.4785 44.9225 45.7649 45.0412C46.0513 45.1598 46.3116 45.3337 46.5308 45.5529C46.75 45.7721 46.9239 46.0324 47.0425 46.3188C47.1612 46.6052 47.2222 46.9122 47.2222 47.2222C47.2222 47.5323 47.1612 47.8392 47.0425 48.1257C46.9239 48.4121 46.75 48.6723 46.5308 48.8915L30.003 65.4193C29.5603 65.8621 28.9598 66.111 28.3337 66.1111Z" fill="#DD2E44"/>
+                        </svg>
                         <div class="stat-value">{{ stats.hours }}</div>
                         <div class="stat-label">Volunteer Hours</div>
                     </div>
+                    
                     <div class="stat-item">
+                        <!-- SVG 4 (Achievements) -->
+                        <svg width="83" height="83" viewBox="0 0 83 83" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M62.9762 38.4848C64.4157 37.2981 72.7287 32.156 77.2807 27.8245C80.8342 24.4396 82.2088 15.6014 76.7425 11.3023C69.6356 5.71923 62.8141 11.5811 62.8141 11.5811C62.8141 11.5811 62.2175 8.26759 58.0675 6.32227C52.8411 3.87118 46.2206 2.95688 40.1317 3.0347C34.231 3.10602 28.797 3.81931 23.9727 6.1861C19.6541 8.30649 19.3947 11.3282 19.3947 11.3282C19.3947 11.3282 13.7274 5.91376 6.78259 10.3102C-0.155693 14.7131 1.83501 23.5318 5.17446 27.2344C9.52548 32.0588 14.7519 34.5163 17.1252 36.2931C19.492 38.0698 21.7615 39.7622 21.7615 41.286C21.7615 42.8099 21.0871 43.147 20.8277 43.0627C20.5749 42.9784 20.1274 41.4935 18.9667 42.129C17.3845 43.0044 17.8644 46.5319 21.1649 46.8691C24.3617 47.1998 24.9713 43.8214 24.9713 43.8214L25.477 40.5209L30.7229 44.1586L36.4745 48.8987L36.306 52.9579C36.306 52.9579 36.0531 56.0899 34.5292 58.8003C33.0054 61.5108 30.5543 64.2148 30.5543 64.2148L30.4765 66.6659L51.8036 66.1601L51.1292 63.7933C51.1292 63.7933 48.3799 60.7716 46.7263 57.5294C45.5462 55.208 45.3581 52.8671 45.3581 52.8671L45.3063 47.0442L56.3751 40.2615C56.3751 40.2615 57.5617 41.1952 57.3931 41.5324C57.2245 41.8696 57.1856 45.3258 59.8442 46.6097C62.4704 47.8806 64.5843 46.2725 64.3314 44.0678C64.0785 41.8696 62.7233 42.6283 62.3018 42.9655C61.8803 43.3027 60.9466 43.387 60.6937 42.116C60.4343 40.8581 61.5367 39.6714 62.9762 38.4848ZM8.48798 26.5146L5.95259 18.7982L9.0197 14.7844L12.4564 13.7793C12.4564 13.7793 16.8463 17.0539 17.002 17.3198C17.1576 17.5856 19.8032 23.026 19.8032 23.026L23.2918 35.6576L8.48798 26.5146ZM58.3269 36.6627C58.3788 36.3968 61.6015 23.1298 61.6015 23.1298C61.6015 22.9741 63.871 21.9172 63.871 21.7032C63.871 21.4892 67.9951 14.7779 67.9951 14.7779L74.8685 15.0438L76.2951 21.8588L72.8584 27.5132C72.8649 27.5197 58.275 36.922 58.3269 36.6627Z" fill="#FEC417"/>
+                            <path d="M77.7605 19.8681C77.2547 13.8247 71.2761 12.3787 68.8185 13.2541C66.3609 14.1294 64.7658 15.77 64.2211 18.1044C63.7802 19.9913 63.3392 21.2493 62.8334 21.4438C62.2758 21.6513 61.7635 21.567 61.7635 21.567C61.7635 21.567 61.6727 17.4819 61.6987 15.8348C61.7635 12.437 62.801 11.5681 62.801 11.5681C62.801 11.5681 62.5805 10.4204 62.1396 9.78491C61.6987 9.15593 60.8816 8.3389 60.8816 8.3389C60.8816 8.3389 61.0697 9.97296 60.2527 10.3555C59.4356 10.7381 58.5537 10.1675 58.5537 10.1675L59.3708 13.5653C59.3708 13.5653 58.048 30.5025 57.9248 30.8786C57.8016 31.2547 52.828 39.8789 52.828 39.8789C52.828 39.8789 49.9295 42.5894 48.5484 43.2184C47.1607 43.8473 45.9676 45.4879 40.618 45.5462C35.2684 45.6111 30.6709 41.3898 30.6709 41.3898L26.0735 36.9804L22.6757 26.9685L22.1699 16.7686L22.3839 13.0595L22.533 11.5098L22.2931 10.7251C22.2931 10.7251 21.8522 11.1661 21.0351 10.978C20.2181 10.79 19.9004 9.72007 19.9004 9.72007C19.9004 9.72007 19.5826 10.2259 19.5243 10.4787C19.4594 10.7316 19.3946 11.3152 19.3946 11.3152C19.3946 11.3152 20.2765 12.2425 20.4645 13.5653C20.6526 14.8881 20.3997 20.3674 19.4594 20.2377C18.5127 20.1145 18.824 15.5171 15.2381 13.7534C12.1321 12.223 7.49577 12.6834 5.60233 16.5222C3.71538 20.3609 5.09655 24.8935 11.0168 29.1148C16.937 33.3362 23.2398 36.8831 24.2384 40.268C25.4316 44.2948 22.7276 46.6875 22.7276 46.6875C22.7276 46.6875 24.6923 46.4151 25.6585 44.3077C25.9698 43.6269 26.0865 42.6348 26.1319 42.0447C28.369 44.9626 31.3453 47.4332 35.2878 48.6263C36.7792 49.1386 38.4587 49.398 40.793 49.398C41.1302 49.398 41.4609 49.385 41.7916 49.372C44.5216 49.2748 46.8559 48.7625 49.119 47.6407C52.1731 46.2271 54.5399 44.0678 56.3685 41.6167C56.3166 42.2003 56.6733 43.6528 57.3541 44.8005C58.5473 46.8172 60.5639 46.9404 60.5639 46.9404C60.5639 46.9404 57.7951 45.3063 58.3592 41.4027C58.9234 37.4991 61.5041 36.1115 65.4077 33.5955C69.3243 31.0731 78.2598 25.9116 77.7605 19.8681ZM13.7921 28.434C12.0348 27.1955 8.95476 25.5419 7.68382 23.0195C5.9914 19.6541 7.36608 15.5884 10.5823 15.0891C17.2612 14.0387 17.3844 22.3322 17.8254 23.3373C18.2663 24.3423 19.5243 24.4072 19.5243 24.4072C19.5243 24.4072 19.5697 24.9648 19.7512 26.0412C19.7577 26.0737 19.7642 26.0996 19.7642 26.132L19.7837 26.2293C19.9069 26.962 20.0819 27.8763 20.3284 28.9203L20.3478 28.9981C20.484 29.5882 20.6266 30.1458 20.7758 30.6581C21.0741 31.7345 21.4372 32.8952 21.8846 34.0884C21.2362 33.6474 17.5206 31.0731 13.7921 28.434ZM74.2978 23.7717C72.9037 26.0283 70.083 27.7077 68.0015 29.1213C65.317 30.9434 61.3226 33.6798 60.1943 34.445C60.4537 33.7576 60.6806 33.0768 60.8881 32.4089C61.2253 31.527 61.5819 30.4506 61.8284 29.2899C62.4768 26.2423 62.587 23.5772 62.587 23.5772C62.587 23.5772 63.9098 23.9533 64.7269 23.0714C65.5439 22.1895 65.8487 19.4531 66.6138 18.1627C67.807 16.1461 70.1997 14.0711 73.792 16.587C75.867 18.046 75.9448 21.1001 74.2978 23.7717ZM39.2433 51.4276L42.9069 51.3822C42.9069 51.3822 43.0042 55.383 43.5813 58.3659C44.1584 61.3551 44.9301 64.6751 44.9301 64.6751C44.9301 64.6751 37.4666 67.1781 37.5119 64.4806C37.5573 61.7831 38.6662 56.5308 38.6662 56.5308C38.6662 56.5308 39.3405 50.2733 39.2433 51.4276Z" fill="#FFA828"/>
+                            <path d="M33.0964 9.84977C33.0964 9.84977 37.1751 9.38938 40.9684 9.44774C44.7618 9.5061 48.6654 10.2518 48.6654 10.2518C48.6654 10.2518 48.4384 22.9482 47.7446 30.0745C47.0573 37.2009 44.3598 42.5375 43.64 44.0484C42.9462 45.5138 42.4404 46.2984 42.4404 46.2984L38.7832 45.8705L32.4609 33.1741L33.0964 9.84977Z" fill="#FFA828"/>
+                            <path d="M28.2133 11.7497C28.2133 11.7497 29.361 11.1726 31.0275 10.5436C32.5384 9.97296 33.9001 9.79788 33.9001 9.79788C33.9001 9.79788 33.939 18.2146 34.0752 24.2191C34.1919 29.3353 36.0853 37.7196 37.0061 39.9632C37.9269 42.2068 39.5869 45.6305 39.5869 45.6305C39.5869 45.6305 36.2474 45.1507 34.1919 42.544C33.109 41.1693 28.0447 30.5349 27.8696 23.5253C27.6945 16.5157 28.3819 11.5746 28.2133 11.7497Z" fill="#FFEFAB"/>
+                            <path d="M26.3135 12.7223C26.1968 13.066 25.2825 20.3091 26.7156 27.0269C28.1486 33.7447 30.269 38.3421 31.6696 40.1642C32.9146 41.7788 33.7252 42.544 34.1856 42.544C34.646 42.544 32.2921 36.9739 31.1963 32.6034C30.1069 28.2395 29.5298 23.0066 29.4131 20.4258C29.2963 17.8385 29.1861 11.1726 29.1861 11.1726C29.1861 11.1726 27.9217 11.7497 27.6363 11.9183C27.351 12.0934 26.3135 12.7223 26.3135 12.7223Z" fill="#FFFCFD"/>
+                            <path d="M34.5879 64.2018C34.5879 64.2018 37.0584 60.1815 37.5772 57.1338C38.0959 54.0862 38.3812 51.3887 38.3812 51.3887L39.9116 51.4535C39.9116 51.4535 39.7624 55.8694 39.5873 58.8587C39.4123 61.848 38.9 64.7789 38.9 64.7789L34.5879 64.2018Z" fill="#FFEFAB"/>
+                            <path d="M36.4875 48.8987C36.4875 48.8987 37.6352 47.7769 40.7931 47.7769C43.951 47.7769 45.3063 48.9895 45.3063 48.9895L45.3905 52.8866C45.3905 52.8866 43.2896 52.2316 40.7348 52.1992C38.6079 52.1733 36.3189 52.9644 36.3189 52.9644L36.4875 48.8987ZM22.6952 10.1934C23.2269 9.70063 28.3237 5.87484 40.3911 5.77109C53.3728 5.65437 58.2426 9.41531 58.5473 9.62281C58.891 9.84977 59.293 10.8873 59.1245 11.3477C58.9494 11.808 58.6057 11.9766 57.633 11.5746C56.6539 11.1726 51.8295 7.65156 40.2225 8.01469C29.0759 8.35836 24.3487 11.7497 23.8494 12.035C23.4474 12.262 22.7017 12.3203 22.358 11.8599C22.0079 11.406 22.3516 10.5177 22.6952 10.1934ZM59.1245 12.8974C57.633 13.0141 58.6641 25.0232 55.5062 32.5451C52.1213 40.5922 47.8027 42.8877 47.9778 43.348C48.1529 43.8084 52.3807 42.531 55.0458 38.7506C57.5163 35.2491 59.0077 32.143 59.7016 28.006C60.3824 23.869 60.7845 12.7677 59.1245 12.8974ZM22.3775 14.2721C22.0014 14.2527 22.384 20.2442 21.7745 22.8769C21.541 23.8884 20.9704 24.0959 20.912 24.3229C20.8537 24.5498 22.1635 32.2598 24.3617 35.6446C26.4886 38.9192 30.684 42.9979 31.3713 42.3105C32.0587 41.6232 28.3237 39.3212 25.8012 34.3218C24.3487 31.4557 22.8703 27.1371 22.812 22.196C22.773 18.9279 23.1816 14.3175 22.3775 14.2721Z" fill="#D1701C"/>
+                            <path d="M56.2646 73.0854L56.2581 63.8192H26.5143C26.6051 63.8192 26.5338 71.3541 26.5208 73.1178H22.293V79.8291H60.0645V73.1178L56.2646 73.0854Z" fill="#865C50"/>
+                            <path d="M36.0468 68.689C35.3141 68.6566 34.4711 68.8057 34.4387 69.7135C34.4062 70.6213 34.4062 73.2475 34.4062 73.7468C34.4062 74.2461 34.8148 74.6805 35.8393 74.713C36.8638 74.7454 46.4802 74.713 47.1545 74.713C47.8289 74.713 48.1791 74.1294 48.205 73.5458C48.2374 72.9622 48.1726 70.5046 48.1726 69.8367C48.1726 68.7279 47.1805 68.7279 46.5061 68.7279C45.7798 68.7149 36.0468 68.689 36.0468 68.689Z" fill="#FCC219"/>
+                        </svg>
                         <div class="stat-value">{{ stats.achievements }}</div>
                         <div class="stat-label">Pencapaian</div>
                     </div>
@@ -48,28 +109,7 @@
                 <div class="actions-row">
                     <router-link class="action-btn" to="/course">Lanjutkan Course</router-link>
                     <router-link class="action-btn" to="/community">Komunitas</router-link>
-                    <router-link class= "action-btn" to="/aboutus">Tentang Kami</router-link>
-                </div>
-            </section>
-
-            <!-- PROGRESS & BADGES -->
-            <section class="card progress-badges animate-on-scroll">
-                <div class="progress-area">
-                    <h3>Progress Course</h3>
-                    <div v-for="c in progress" :key="c.id" class="progress-row">
-                        <div class="progress-title">{{ c.title }}</div>
-                            <div class="progress-bar" role="progressbar" :aria-valuenow="c.percent" aria-valuemin="0" aria-valuemax="100">
-                                <div class="progress-fill" :style="{ width: c.percent + '%' }"></div>
-                            </div>
-                        <div class="progress-percent">{{ c.percent }}%</div>
-                    </div>
-                </div>
-
-                <div class="badges-area">
-                    <h3>Pencapaian</h3>
-                    <div class="badges-row">
-                        <div v-for="b in badges" :key="b.id" class="badge-item">🏅<span>{{ b.name }}</span></div>
-                    </div>
+                    <router-link class="action-btn" to="/aboutus">Tentang Kami</router-link>
                 </div>
             </section>
 
@@ -89,34 +129,86 @@
 </template>
 
 <script>
-    export default {
+export default {
     name: 'ProfilePage',
     data() {
         return {
-        user: { name: 'tiaraa', email: 'tiaraa@gmail.com', joined: '20/11/2025' },
-        stats: { courses: 3, posts: 8, hours: '12h', achievements: 5 },
-        progress: [
-            { id: 1, title: 'Pengenalan Ekosistem Laut', percent: 100 },
-            { id: 2, title: 'Konservasi Terumbu Karang', percent: 45 },
-            { id: 3, title: 'Dampak Pencemaran Laut', percent: 20 }
-        ],
-        badges: [ { id: 1, name: 'Pemula Laut' }, { id: 2, name: 'Penjelajah' }, { id: 3, name: 'Penjaga Laut' } ],
-        activity: [
-            { id: 1, text: "Menyelesaikan modul 'Pengenalan Ekosistem Laut'", time: '2 jam lalu' },
-            { id: 2, text: "Berkomentar di diskusi 'Cara Menjaga Terumbu Karang'", time: '1 hari lalu' }
-        ]
+        user: { 
+            name: 'Guest', 
+            email: 'guest@example.com',
+            username: 'guest',
+            bio: 'Belum ada bio',
+            avatar: '',
+            joined: 'Not available' 
+        },
+        stats: {
+            courses: 0, 
+            posts: 0, 
+            hours: '0h', 
+            achievements: 0 
+        },
+        activity: []
         }
     },
     mounted() {
+        this.loadUserData()
         this.initScrollAnimations()
     },
     methods: {
+        loadUserData() {
+        const savedUserData = localStorage.getItem('userData')
+            
+            if (savedUserData) {
+                const userData = JSON.parse(savedUserData)
+                this.user = {
+                    name: userData.name || 'User',
+                    email: userData.email || 'No email',
+                    username: userData.username || userData.name || 'User',
+                    bio: userData.bio || 'Belum ada bio',
+                    avatar: userData.avatar || '',
+                    joined: userData.joinDate || new Date().toLocaleDateString('id-ID')
+                }
+                
+                this.updateUserStats()
+            } else {
+                this.$router.push('/login')
+            }
+        },
+        
+        updateUserStats() {
+        this.stats = { 
+            courses: 3, 
+            posts: 8, 
+            hours: '12h', 
+            achievements: 5 
+        }
+        
+        this.activity = [
+            { 
+            id: 1, 
+            text: `Selamat datang ${this.user.name} di NauticaEdu!`, 
+            time: 'Baru saja' 
+            },
+            { 
+            id: 2, 
+            text: 'Menyelesaikan course "Pengenalan Laut"', 
+            time: '2 jam lalu' 
+            },
+            { 
+            id: 3, 
+            text: 'Bergabung dalam komunitas "Marine Conservation"', 
+            time: '1 hari lalu' 
+            }
+        ]
+        },
+        
         logout() {
-        // placeholder logout
-        console.log('logout clicked')
-        // perform actual logout (clear token/localStorage, redirect)
+        localStorage.removeItem('userData')
+        localStorage.removeItem('isLoggedIn')
+        localStorage.removeItem('role')
         this.$router.push('/login')
         },
+        
         initScrollAnimations() {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -129,36 +221,53 @@
 
         document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el))
         },
-    
+        
         goEditProfile() {
-            this.$router.push('/edit-profile')
+        this.$router.push('/edit-profile')
         }
-    },
     }
+}
 </script>
 
 <style scoped>
-    /* Background uses uploaded image path */
+    /* CSS sama seperti sebelumnya, tetap lengkap */
     .profile-page {
+        padding-top: 30px;
         min-height: 100vh;
         display: flex;
         flex-direction: column;
-        background-image: url('/mnt/data/4ea49617-3844-4261-8153-3c5d33e8553b.png');
-        background-size: cover;
-        background-position: center;
-        padding-bottom: 40px;
+        position: relative;
+        overflow-x: hidden;
+        transform: translateZ(0);
+        z-index: 2;
     }
 
-    /* CONTAINER */
+    .profile-page::before {
+        content: ""; 
+        position: fixed; 
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('/foto/bgprofile.jpg') no-repeat top center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        z-index: 2;
+        pointer-events: none;
+    }
+
     .container {
         padding-top: 50px;
         max-width: 1100px;
-        margin: 24px auto;
+        margin: 0 auto 24px auto;
         width: calc(100% - 40px);
         display: grid;
         grid-template-columns: 1fr;
         gap: 18px;
         z-index: 2;
+        position: relative;
+        flex: 1;
+        min-height: calc(100vh - 50px);
     }
     
     .card {
@@ -166,224 +275,301 @@
         border-radius: 12px;
         padding: 18px;
         box-shadow: 0 6px 20px rgba(11,91,168,0.06);
+    
     }
 
-    /* PROFILE */
     .profile-card {
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        gap:12px
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
     }
     
     .profile-left {
-        display:flex;
-        align-items:center;
-        gap:14px
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        flex: 1;
     }
     
     .avatar {
-        width:84px;
-        height:84px;
-        border-radius:50%;
+        width: 84px;
+        height: 84px;
+        border-radius: 50%;
         background: linear-gradient(135deg,#dcecff,#bfe0ff);
-        box-shadow:0 6px 12px rgba(0,0,0,0.08)
+        box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    
+    .avatar-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    .avatar-placeholder {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #004b8f;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+    }
+    
+    .profile-meta {
+        flex: 1;
     }
     
     .username {
-        font-size:20px;
-        margin:0
+        font-size: 20px;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
     
-    .username .edit{
-        font-size:12px;
-        color:#0060C0;
-        margin-left:6px
-    }
-
-    .email {
-        margin:6px 0 0 0;
-        color:#41627a
-    }
-    
-    .member-badge {
-        display:inline-block;
-        margin-top:8px;
-        padding:6px 10px;
-        background:#eaf5ff;
-        color:#0b5ba8;
-        border-radius:999px;
-        font-weight:600;
-        font-size:13px
-    }
-    
-    .profile-actions .btn.logout {
-        background:#ff5c3b;
-        color:#fff;
-        border:none;
-        padding:10px 14px;
-        border-radius:8px;
-        cursor:pointer
-    }
-
-    .edit {
+    .username .edit {
+        font-size: 12px;
+        color: #0060C0;
         cursor: pointer;
-        margin-left: 6px;
         padding: 4px;
-        font-size: 14px;
-        color: #0060c0;
         transition: 0.2s;
     }
 
-    .edit:hover {
+    .username .edit:hover {
         color: #003f83;
         transform: scale(1.1);
     }
 
+    .username-handle {
+        color: #666;
+        margin: 2px 0;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
 
-    /* STATS */
+    .email {
+        margin: 6px 0 0 0;
+        color: #41627a;
+    }
+
+    .user-bio {
+        color: #555;
+        margin: 8px 0;
+        font-style: italic;
+        line-height: 1.4;
+        font-size: 0.9rem;
+    }
+    
+    .member-badge {
+        display: inline-block;
+        margin-top: 8px;
+        padding: 6px 10px;
+        background: #eaf5ff;
+        color: #0b5ba8;
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: 13px;
+    }
+    
+    .profile-actions {
+        flex-shrink: 0;
+    }
+
+    .profile-actions .btn.logout {
+        background: #ff5c3b;
+        color: #fff;
+        border: none;
+        padding: 10px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background 0.3s ease;
+    }
+
+    .profile-actions .btn.logout:hover {
+        background: #e04a2d;
+    }
+
     .stats-grid {
-        display:grid;
-        grid-template-columns: repeat(4,1fr);
-        gap:12px;
-        margin-top:12px
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin-top: 12px;
     }
     
     .stat-item {
-        background:#f3fbff;
-        padding:14px;
-        border-radius:10px;
-        text-align:center
+        background: #f3fbff;
+        padding: 14px;
+        border-radius: 10px;
+        text-align: center;
+        transition: transform 0.3s ease;
+    }
+
+    .stat-item:hover {
+        transform: translateY(-2px);
     }
     
     .stat-value {
-        font-size:20px;
-        color:#0056a3;
-        font-weight:700
+        font-size: 20px;
+        color: #0056a3;
+        font-weight: 700;
+        margin: 8px 0;
     }
     
     .stat-label {
-        color:#4b6b80;
-        margin-top:6px
+        color: #4b6b80;
+        margin-top: 6px;
+        font-size: 0.9rem;
     }
 
-    /* ACTIONS */
     .actions-row {
-        display:flex;
-        gap:12px
+        display: flex;
+        gap: 12px;
     }
     
     .action-btn {
-        flex:1;
-        display:inline-flex;
-        align-items:center;
-        justify-content:center;
-        padding:12px 8px;
-        background:#eef5ff;
-        border-radius:10px;
-        text-decoration:none;
-        color:#084a86;
-        font-weight:700
+        flex: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 8px;
+        background: #eef5ff;
+        border-radius: 10px;
+        text-decoration: none;
+        color: #084a86;
+        font-weight: 700;
+        transition: all 0.3s ease;
     }
 
-    /* PROGRESS & BADGES */
-    .progress-badges {
-        display:grid;
-        grid-template-columns: 1fr 300px;
-        gap:18px;
-        align-items:start
-    }
-    
-    .progress-row {
-        margin-bottom:12px
-    }
-    
-    .progress-title {
-        font-weight:600
-    }
-    
-    .progress-bar {
-        width:100%;
-        height:12px;
-        background:#e6f0ff;
-        border-radius:999px;
-        overflow:hidden;
-        margin-top:6px
-    }
-    
-    .progress-fill {
-        height:100%;
-        background: linear-gradient(90deg,#0b5ba8,#3ba0ff);
-        border-radius:999px;
-        transition: width 800ms
-        cubic-bezier(.2,.9,.2,1)
-    }
-    
-    .progress-percent {
-        font-size:13px;
-        color:#4b6b80;
-        margin-top:6px
-    }
-    
-    .badges-row {
-        display:flex;
-        gap:10px;
-        flex-wrap:wrap
-    }
-    .badge-item {
-        background:#f0f8ff;
-        padding:8px 12px;
-        border-radius:10px;
-        font-weight:600;
-        display:flex;
-        gap:8px;
-        align-items:center
+    .action-btn:hover {
+        background: #dce9ff;
+        transform: translateY(-1px);
     }
 
-    /* ACTIVITY */
     .activity-list {
-        display:flex;
-        flex-direction:column;
-        gap:10px
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
     
     .activity-item {
-        background:#eaf5ff;
-        padding:12px;
-        border-radius:10px
+        background: #eaf5ff;
+        padding: 12px;
+        border-radius: 10px;
+        transition: background 0.3s ease;
+    }
+
+    .activity-item:hover {
+        background: #dcecff;
     }
     
     .activity-time {
-        color:#5b7690;
-        font-size:13px;
-        margin-top:6px
+        color: #5b7690;
+        font-size: 13px;
+        margin-top: 6px;
     }
 
-    /* ================== Responsive Breakpoints ================== */
+    .animate-on-scroll {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: 
+            opacity 0.5s ease-out,
+            transform 0.5s ease-out;
+    }
+
+    .animate-on-scroll.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
     @media (max-width: 900px) {
-    .stats-grid { grid-template-columns: repeat(2,1fr) }
-    .progress-badges { grid-template-columns: 1fr }
-    .nav-links a { margin-left:12px; font-size:14px }
+        .stats-grid { 
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .profile-page::before {
+            background-attachment: scroll;
+        }
     }
 
     @media (max-width: 600px) {
-    .nav-inner { padding:10px }
-    .brand { font-size:20px }
-    .container { width: calc(100% - 28px); margin: 12px auto }
-    .profile-card { flex-direction:column; align-items:flex-start }
-    .profile-actions { width:100%; display:flex; justify-content:flex-end; margin-top:8px }
-    .stats-grid { grid-template-columns: repeat(2,1fr) }
-    .actions-row { flex-direction:column }
-    .action-btn { width:100% }
-    .stat-value { font-size:18px }
+        .container { 
+            width: calc(100% - 28px); 
+            margin: 12px auto;
+            padding-top: 30px;
+            overflow-y: auto;
+        }
+        
+        .profile-card { 
+            flex-direction: column; 
+            align-items: flex-start;
+            gap: 16px;
+        }
+        
+        .profile-left {
+            width: 100%;
+        }
+        
+        .profile-actions { 
+            width: 100%; 
+            display: flex; 
+            justify-content: flex-end; 
+            margin-top: 8px;
+        }
+        
+        .actions-row { 
+            flex-direction: column;
+        }
+        
+        .action-btn { 
+            width: 100%;
+        }
+        
+        .stat-value { 
+            font-size: 18px;
+        }
+        
+        .profile-page::before {
+            background-size: cover;
+            background-position: center 20%;
+        }
     }
 
-    /* ================== Scroll Animation ================== */
-    .animate-on-scroll { opacity:0; transform: translateY(18px); transition: all 700ms cubic-bezier(.2,.9,.2,1); will-change: transform, opacity }
-    .animate-on-scroll.is-visible { opacity:1; transform: translateY(0) }
+    @media (max-width: 400px) {
+        .container {
+            padding-top: 20px;
+            gap: 12px;
+        }
+        
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .profile-page::before {
+            background-position: center 30%;
+        }
+        
+        .avatar {
+            width: 70px;
+            height: 70px;
+        }
+        
+        .avatar-placeholder {
+            font-size: 1.5rem;
+        }
+    }
 
-    /* small accessibility tweak for reduced-motion */
-    @media (prefers-reduced-motion: reduce) {
-    .animate-on-scroll { transition: none !important; transform: none !important; opacity: 1 !important }
+    @media (min-width: 1600px) {
+        .profile-page::before {
+            background-size: cover;
+        }
     }
 </style>

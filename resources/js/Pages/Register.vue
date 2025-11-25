@@ -126,18 +126,21 @@
                 this.errors.confirm = "Passwords do not match";
 
             if (Object.keys(this.errors).length === 0) {
-                // Simpan data user ke localStorage
+                // SIMPAN DATA USER KE LOCALSTORAGE - YANG DIPERBAIKI
                 const userData = {
                     name: this.form.name,
                     email: this.form.email,
-                    joinDate: new Date().toLocaleDateString('id-ID')
+                    joinDate: new Date().toLocaleDateString('id-ID'),
+                    role: 'user' // Tambahkan role default
                 }; 
                 
-                localStorage.setItem('user', 'logged_in');
+                // Simpan semua data yang diperlukan
                 localStorage.setItem('userData', JSON.stringify(userData));
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('role', 'user');
 
                 alert("Registered Successfully!");
-                this.$router.push('/');
+                this.$router.push('/profile'); // Redirect ke profile, bukan home
             } 
         }
     }

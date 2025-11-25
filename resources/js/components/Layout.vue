@@ -9,7 +9,7 @@
     </div>
 
     <!-- Header -->
-    <header v-if="!isAuthPage" class="main-header">
+    <header v-if="!shouldHideHeader" class="main-header">
       <div class="logo">NauticaEdū</div>
       
       <nav class="nav-scroll">
@@ -36,7 +36,7 @@
     </header>
 
     <!-- Main Content -->
-    <main :class="['main-content', { 'no-header': isAuthPage }]">
+    <main :class="['main-content', { 'no-header': shouldHideHeader }]">
       <!-- Bubble Animation -->
       <div class="bubbles-container" v-if="showBubbles">
         <div 
@@ -93,18 +93,24 @@ export default {
     const isLoggedIn = ref(false)
     const hasError = ref(false)
 
-    // List of auth pages where header should be hidden
-    const AUTH_PAGES = ['Login', 'Register']
-
-    // Computed property to check if current page is auth page
-    const isAuthPage = computed(() => {
+    // Computed property to check if header should be hidden
+    const shouldHideHeader = computed(() => {
       const routeName = route.name?.toString() || ''
+      const routePath = route.path?.toString() || ''
+      
       console.log('🔄 Route Detection:', {
         routeName: routeName,
+        routePath: routePath,
         isAuthPage: ['Login', 'Register'].includes(routeName),
-        allRoutes: ['Login', 'Register']
+        isAdminPage: routePath.startsWith('/admin'),
+        shouldHideHeader: ['Login', 'Register'].includes(routeName) || routePath.startsWith('/admin')
       })
-      return ['Login', 'Register'].includes(routeName)
+      
+      // Hide header untuk auth pages DAN admin pages
+      const isAuthPage = ['Login', 'Register'].includes(routeName)
+      const isAdminPage = routePath.startsWith('/admin')
+      
+      return isAuthPage || isAdminPage
     })
 
     // Check login status dengan error handling
@@ -205,8 +211,8 @@ export default {
     // Watch route changes untuk bubble animation
     watch(route, (to, from) => {
       try {
-        // Only show bubbles on non-auth pages
-        if (!isAuthPage.value) {
+        // Only show bubbles on non-admin, non-auth pages
+        if (!shouldHideHeader.value) {
           showBubbles.value = true
           generateBubbles()
           setTimeout(() => {
@@ -226,7 +232,7 @@ export default {
       showBubbles,
       bubbles,
       isLoggedIn,
-      isAuthPage,
+      shouldHideHeader, 
       hasError,
       handleProfileClick,
       updateLoginStatus,
